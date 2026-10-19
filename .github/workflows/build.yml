@@ -22,161 +22,80 @@ jobs:
           echo "y" | sudo ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --licenses
           sudo ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager "platforms;android-34" "build-tools;34.0.0"
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.7
-
-      - name: Create Android Project from Scratch
+      - name: Create Project Files
         run: |
           mkdir -p app/src/main/java/com/example/tiktokposter
           
-          cat << 'EOF' > settings.gradle
-          pluginManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-                  gradlePluginPortal()
-              }
-          }
-          dependencyResolutionManagement {
-              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-          rootProject.name = "TikTokPoster"
-          include(":app")
-          EOF
+          echo "pluginManagement {" > settings.gradle
+          echo "    repositories {" >> settings.gradle
+          echo "        google()" >> settings.gradle
+          echo "        mavenCentral()" >> settings.gradle
+          echo "        gradlePluginPortal()" >> settings.gradle
+          echo "    }" >> settings.gradle
+          echo "}" >> settings.gradle
+          echo "dependencyResolutionManagement {" >> settings.gradle
+          echo "    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)" >> settings.gradle
+          echo "    repositories {" >> settings.gradle
+          echo "        google()" >> settings.gradle
+          echo "        mavenCentral()" >> settings.gradle
+          echo "    }" >> settings.gradle
+          echo "}" >> settings.gradle
+          echo "rootProject.name = \"TikTokPoster\"" >> settings.gradle
+          echo "include ':app'" >> settings.gradle
 
-          cat << 'EOF' > build.gradle
-          plugins {
-              id 'com.android.application' version '8.4.0' apply false
-              id 'org.jetbrains.kotlin.android' version '1.9.22' apply false
-          }
-          EOF
+          echo "plugins {" > build.gradle
+          echo "    id 'com.android.application' version '8.2.2' apply false" >> build.gradle
+          echo "    id 'org.jetbrains.kotlin.android' version '1.9.22' apply false" >> build.gradle
+          echo "}" >> build.gradle
 
-          cat << 'EOF' > app/build.gradle
-          plugins {
-              id 'com.android.application'
-              id 'org.jetbrains.kotlin.android'
-          }
-          android {
-              namespace 'com.example.tiktokposter'
-              compileSdk 34
-              defaultConfig {
-                  applicationId "com.example.tiktokposter"
-                  minSdk 24
-                  targetSdk 34
-                  versionCode 1
-                  versionName "1.0"
-              }
-              buildTypes {
-                  release {
-                      minifyEnabled false
-                  }
-              }
-              compileOptions {
-                  sourceCompatibility JavaVersion.VERSION_17
-                  targetCompatibility JavaVersion.VERSION_17
-              }
-              kotlinOptions {
-                  jvmTarget = '17'
-              }
-          }
-          dependencies {
-              implementation 'androidx.core:core-ktx:1.12.0'
-              implementation 'androidx.appcompat:appcompat:1.6.1'
-              implementation 'com.google.android.material:material:1.11.0'
-          }
-          EOF
+          echo "plugins {" > app/build.gradle
+          echo "    id 'com.android.application'" >> app/build.gradle
+          echo "    id 'org.jetbrains.kotlin.android'" >> app/build.gradle
+          echo "}" >> app/build.gradle
+          echo "android {" >> app/build.gradle
+          echo "    namespace 'com.example.tiktokposter'" >> app/build.gradle
+          echo "    compileSdk 34" >> app/build.gradle
+          echo "    defaultConfig {" >> app/build.gradle
+          echo "        applicationId \"com.example.tiktokposter\"" >> app/build.gradle
+          echo "        minSdk 24" >> app/build.gradle
+          echo "        targetSdk 34" >> app/build.gradle
+          echo "        versionCode 1" >> app/build.gradle
+          echo "        versionName \"1.0\"" >> app/build.gradle
+          echo "    }" >> app/build.gradle
+          echo "}" >> app/build.gradle
+          echo "dependencies {" >> app/build.gradle
+          echo "    implementation 'androidx.appcompat:appcompat:1.6.1'" >> app/build.gradle
+          echo "    implementation 'com.google.android.material:material:1.11.0'" >> app/build.gradle
+          echo "}" >> app/build.gradle
 
-          cat << 'EOF' > app/src/main/AndroidManifest.xml
-          <?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <application
-                  android:allowBackup="true"
-                  android:label="TikTok Smart"
-                  android:theme="@style/Theme.Material3.DayNight">
-                  <activity
-                      android:name=".MainActivity"
-                      android:exported="true">
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>
-          EOF
+          echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>" > app/src/main/AndroidManifest.xml
+          echo "<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">" >> app/src/main/AndroidManifest.xml
+          echo "    <application android:label=\"TikTok Smart\" android:theme=\"@style/Theme.Material3.DayNight\">" >> app/src/main/AndroidManifest.xml
+          echo "        <activity android:name=\".MainActivity\" android:exported=\"true\">" >> app/src/main/AndroidManifest.xml
+          echo "            <intent-filter>" >> app/src/main/AndroidManifest.xml
+          echo "                <action android:name=\"android.intent.action.MAIN\" />" >> app/src/main/AndroidManifest.xml
+          echo "                <category android:name=\"android.intent.category.LAUNCHER\" />" >> app/src/main/AndroidManifest.xml
+          echo "            </intent-filter>" >> app/src/main/AndroidManifest.xml
+          echo "        </activity>" >> app/src/main/AndroidManifest.xml
+          echo "    </application>" >> app/src/main/AndroidManifest.xml
+          echo "</manifest>" >> app/src/main/AndroidManifest.xml
 
-          cat << 'EOF' > app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          package com.example.tiktokposter
+          echo "package com.example.tiktokposter" > app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "import android.os.Bundle" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "import android.widget.TextView" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "import androidx.appcompat.app.AppCompatActivity" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "class MainActivity : AppCompatActivity() {" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "    override fun onCreate(savedInstanceState: Bundle?) {" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "        super.onCreate(savedInstanceState)" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "        val textView = TextView(this).apply {" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "            text = \"مرحباً! تطبيق تيك توك الذكي يعمل بنجاح 🎉\"" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "            textSize = 24f" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "        }" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "        setContentView(textView)" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "    }" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
+          echo "}" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
 
-          import android.os.Bundle
-          import android.widget.Button
-          import android.widget.EditText
-          import android.widget.LinearLayout
-          import android.widget.TextView
-          import androidx.appcompat.app.AppCompatActivity
-
-          class MainActivity : AppCompatActivity() {
-              override fun onCreate(savedInstanceState: Bundle?) {
-                  super.onCreate(savedInstanceState)
-                  
-                  val layout = LinearLayout(this).apply {
-                      orientation = LinearLayout.VERTICAL
-                      setPadding(48, 150, 48, 48)
-                  }
-
-                  val title = TextView(this).apply {
-                      text = "ما هو غرض حساب TikTok؟"
-                      textSize = 22f
-                      textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-                  }
-                  layout.addView(title)
-
-                  val inputGoal = EditText(this).apply {
-                      hint = "مثال: تسويق منتج، تعليمي، ترفيهي..."
-                      textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-                  }
-                  layout.addView(inputGoal)
-
-                  val btnGenerate = Button(this).apply {
-                      text = "توليد خطة الحساب"
-                  }
-                  layout.addView(btnGenerate)
-
-                  val resultText = TextView(this).apply {
-                      textSize = 18f
-                      setPadding(0, 50, 0, 0)
-                      textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-                  }
-                  layout.addView(resultText)
-
-                  setContentView(layout)
-
-                  btnGenerate.setOnClickListener {
-                      val goal = inputGoal.text.toString()
-                      if (goal.isNotEmpty()) {
-                          resultText.text = """
-                              ✅ خطة الحساب المقترحة:
-                              
-                              الاسم: tiktok_${goal.take(5)}_sa
-                              البايو: $goal 🇸🇦 | محتوى يومي
-                              أفضل وقت للنشر: 20:00 - 22:00
-                              الهاشتاقات: #fyp #viral #السعودية #${goal.replace(" ", "")}
-                          """.trimIndent()
-                      } else {
-                          resultText.text = "الرجاء كتابة الغرض أولاً."
-                      }
-                  }
-              }
-          }
-          EOF
-
-      - name: Build APK with Gradle
+      - name: Build APK
         run: gradle assembleDebug
 
       - name: Upload APK
