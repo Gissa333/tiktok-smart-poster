@@ -22,86 +22,12 @@ jobs:
           echo "y" | sudo ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --licenses
           sudo ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager "platforms;android-34" "build-tools;34.0.0"
 
-      - name: Install specific Gradle version
-        run: |
-          wget https://services.gradle.org/distributions/gradle-8.5-bin.zip
-          unzip -q gradle-8.5-bin.zip
-          echo "$PWD/gradle-8.5/bin" >> $GITHUB_PATH
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.7
 
-      - name: Create Project Files
-        run: |
-          mkdir -p app/src/main/java/com/example/tiktokposter
-          
-          echo "pluginManagement {" > settings.gradle
-          echo "    repositories {" >> settings.gradle
-          echo "        google()" >> settings.gradle
-          echo "        mavenCentral()" >> settings.gradle
-          echo "        gradlePluginPortal()" >> settings.gradle
-          echo "    }" >> settings.gradle
-          echo "}" >> settings.gradle
-          echo "dependencyResolutionManagement {" >> settings.gradle
-          echo "    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)" >> settings.gradle
-          echo "    repositories {" >> settings.gradle
-          echo "        google()" >> settings.gradle
-          echo "        mavenCentral()" >> settings.gradle
-          echo "    }" >> settings.gradle
-          echo "}" >> settings.gradle
-          echo "rootProject.name = \"TikTokPoster\"" >> settings.gradle
-          echo "include ':app'" >> settings.gradle
-
-          echo "plugins {" > build.gradle
-          echo "    id 'com.android.application' version '8.2.2' apply false" >> build.gradle
-          echo "    id 'org.jetbrains.kotlin.android' version '1.9.22' apply false" >> build.gradle
-          echo "}" >> build.gradle
-
-          echo "plugins {" > app/build.gradle
-          echo "    id 'com.android.application'" >> app/build.gradle
-          echo "    id 'org.jetbrains.kotlin.android'" >> app/build.gradle
-          echo "}" >> app/build.gradle
-          echo "android {" >> app/build.gradle
-          echo "    namespace 'com.example.tiktokposter'" >> app/build.gradle
-          echo "    compileSdk 34" >> app/build.gradle
-          echo "    defaultConfig {" >> app/build.gradle
-          echo "        applicationId \"com.example.tiktokposter\"" >> app/build.gradle
-          echo "        minSdk 24" >> app/build.gradle
-          echo "        targetSdk 34" >> app/build.gradle
-          echo "        versionCode 1" >> app/build.gradle
-          echo "        versionName \"1.0\"" >> app/build.gradle
-          echo "    }" >> app/build.gradle
-          echo "}" >> app/build.gradle
-          echo "dependencies {" >> app/build.gradle
-          echo "    implementation 'androidx.appcompat:appcompat:1.6.1'" >> app/build.gradle
-          echo "    implementation 'com.google.android.material:material:1.11.0'" >> app/build.gradle
-          echo "}" >> app/build.gradle
-
-          echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>" > app/src/main/AndroidManifest.xml
-          echo "<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">" >> app/src/main/AndroidManifest.xml
-          echo "    <application android:label=\"TikTok Smart\" android:theme=\"@style/Theme.Material3.DayNight\">" >> app/src/main/AndroidManifest.xml
-          echo "        <activity android:name=\".MainActivity\" android:exported=\"true\">" >> app/src/main/AndroidManifest.xml
-          echo "            <intent-filter>" >> app/src/main/AndroidManifest.xml
-          echo "                <action android:name=\"android.intent.action.MAIN\" />" >> app/src/main/AndroidManifest.xml
-          echo "                <category android:name=\"android.intent.category.LAUNCHER\" />" >> app/src/main/AndroidManifest.xml
-          echo "            </intent-filter>" >> app/src/main/AndroidManifest.xml
-          echo "        </activity>" >> app/src/main/AndroidManifest.xml
-          echo "    </application>" >> app/src/main/AndroidManifest.xml
-          echo "</manifest>" >> app/src/main/AndroidManifest.xml
-
-          echo "package com.example.tiktokposter" > app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "import android.os.Bundle" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "import android.widget.TextView" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "import androidx.appcompat.app.AppCompatActivity" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "class MainActivity : AppCompatActivity() {" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "    override fun onCreate(savedInstanceState: Bundle?) {" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "        super.onCreate(savedInstanceState)" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "        val textView = TextView(this).apply {" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "            text = \"مرحباً! تطبيق تيك توك الذكي يعمل بنجاح 🎉\"" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "            textSize = 24f" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "        }" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "        setContentView(textView)" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "    }" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-          echo "}" >> app/src/main/java/com/example/tiktokposter/MainActivity.kt
-
-      - name: Build APK
+      - name: Build APK with Gradle
         run: gradle assembleDebug
 
       - name: Upload APK
